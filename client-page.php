@@ -40,21 +40,45 @@
         <button type="submit" class="submit-btn" name="button" value="wish" style="width: 70px;">wish</button><br><br>
 
     <?php elseif ($_SESSION['step'] == "ask for a wish"): ?>
-    <label for = "Categories wish">Category</label><br>
-    <label><input type= "text" name = "Categories_wish" placeholder = "Enter categorie you wish"><br><br>
+        <label for = "Categories wish">Category</label><br>
+        <label><input type= "text" name = "Categories_wish" placeholder = "Enter categorie you wish"><br><br>
+        
+        <label for = "Categories wish">Item</label><br>
+        <input type= "text" name = "item_wish" placeholder = "Enter item you wish"><br><br>
+        
+        <button type="submit" class="submit-btn" style="width: 70px;" name = "button" value = "wish">submit</button>
+        <?php echo str_repeat("&nbsp;", 8); ?>
+        <button type="submit" class="submit-btn" style="width: 100px;" name = "button" value = "answer">notification</button>
+        <?php echo str_repeat("&nbsp;", 8); ?>
+        <button type="submit" class="submit-btn" style="width: 70px;" name = "button" value = "back">back</button>
+        <?php echo str_repeat("&nbsp;", 8); ?>
+        <button type="submit" class="submit-btn" name="button" value="log_out" style="width: 70px;">log out</button><br><br>
+        <?php echo "you can send more than wish by submitting every wish<br><br>"; ?>
+        <?php if (!empty($message)): ?>
+                <?php echo ucwords($message); ?>
+        <?php endif; ?>
     
-    <label for = "Categories wish">Item</label><br>
-    <input type= "text" name = "item_wish" placeholder = "Enter item you wish"><br><br>
-    
-    <button type="submit" class="submit-btn" style="width: 70px;" name = "button" value = "wish">submit</button>
-    <?php echo str_repeat("&nbsp;", 8); ?>
-    <button type="submit" class="submit-btn" style="width: 70px;" name = "button" value = "back">back</button>
-    <?php echo str_repeat("&nbsp;", 8); ?>
-    <button type="submit" class="submit-btn" name="button" value="log out" style="width: 70px;">log out</button><br><br>
-    <?php echo "after you submit your wish succesfully you will be redirected to login page<br><br>"; ?>
-    <?php if (!empty($message)): ?>
-            <?php echo ucwords($message); ?>
+    <?php elseif ($_SESSION['step'] == "check answer"): ?>
+    <?php if (empty($_SESSION['answer'][$_SESSION['user']])): ?>
+        <p>No results</p>
+    <?php else: ?>
+        <?php foreach ($_SESSION['answer'][$_SESSION['user']] as $state => $categories): ?>
+            <?php if (!empty($categories)): ?>
+                <h2><?= $state == "accepted" ? "Accepted Wishes" : "Rejected Wishes" ?></h2>
+                <?php foreach ($categories as $category => $items): ?>
+                    <?php if (!empty($items)): ?>
+                        <h3><?= htmlspecialchars($category) ?></h3>
+                        <ul>
+                            <?php foreach ($items as $item): ?>
+                                <li><?= htmlspecialchars($item) ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
     <?php endif; ?>
+    <button type="submit" class="submit-btn" name="button" value="log_out" style="width: 70px;">log out</button><br><br>
 
     <?php elseif ($_SESSION['step'] == "choose what to pay"): ?>
         <?php

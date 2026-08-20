@@ -4,6 +4,11 @@ error_reporting(E_ALL);
 
 session_start();
 
+if (!isset($_SESSION['user'])) {
+    header("Location: index.php");
+    exit();
+}
+
 if (!isset($_SESSION['categories'])) {
     $_SESSION['categories'] = [
 
@@ -40,6 +45,42 @@ if (!isset($_SESSION['categories'])) {
     ];
 }
 
+// $_SESSION['answer'] = [
+//     'A' => [
+//         'rejected' => [
+//             'Electronics' => [
+//                 'Laptop',
+//                 'Keyboard',
+//                 'Mouse'
+//             ],
+//             'Clothes' => [
+//                 'T-Shirt',
+//                 'Jacket'
+//             ]
+//         ],
+//         'accepted' => [
+//             'Electronics' => [
+//                 'Monitor',
+//                 'Headphones'
+//             ]
+//         ]
+//     ],
+
+//     'Mohamed' => [
+//         'rejected' => [
+//             'Books' => [
+//                 'PHP Book',
+//                 'SQL Book'
+//             ]
+//         ],
+//         'accepted' => [
+//             'Electronics' => [
+//                 'Keyboard'
+//             ]
+//         ]
+//     ]
+// ];
+
 if (!isset($_SESSION['step'])) {
     $_SESSION['step'] = "choose Categories";
 }
@@ -60,6 +101,8 @@ function print_data($data){
 
 function do_log_out(){
     unset($_SESSION['step']);
+    unset($_SESSION['user']);
+    unset($_SESSION['chooses']);
     header("Location: index.php");
     exit();
 }
@@ -154,28 +197,59 @@ function handle_last_step(){
     }
 }
 
+function already_exist($list, $user, $item){
+    foreach($list['wish'][$user] as $category => $wish){
+        foreach($wish as $i){
+            if($i == $item){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
 
 function ask_for_wish(){
     if (!isset($_POST['button'])) return;
  
     if ($_POST['button'] == "wish"){
         if (!isset($_POST['Categories_wish']) || $_POST['Categories_wish'] == "" || !isset($_POST['item_wish']) || $_POST['item_wish'] == ""){
-            set_error("you DID NOT enter full wish<br>try again or get back to choose what to pay");
+            set_error("you DID NOT enter full wish");
         } else {
-            $_SESSION['wish'][] = [
-                'category' => $_POST['Categories wish'],
-                'item' => $_POST['item wish'],
-            ];
-            unset($_SESSION['step']);
-            header("Location: index.php");
-            exit();
+            if (!isset($_SESSION['wish'])) {
+                $_SESSION['wish'] = [];
+            }
+            $Categories_wish = $_POST['Categories_wish'];
+            $item_wish = $_POST['item_wish'];
+            $user = $_SESSION['user'];
+            if (!isset($_SESSION['wish'][$user][$Categories_wish])) {
+                $_SESSION['wish'][$user][$Categories_wish] = [];
+            }
+            if (!already_exist($_SESSION, $user, $item_wish)){
+                $_SESSION['wish'][$user][$Categories_wish][] = $item_wish;
+                $_SESSION['step'] = "ask for a wish";
+                header("Location: client.php");
+                exit();
+            } else {
+                set_error("you has sent this wish already before");
+            }
         }
     } elseif ($_POST['button'] == "back"){
         $_SESSION['step'] = "check prices";
-    } else {
-        unset($_SESSION['chooses']);
-        header("Location: index.php");
-        exit();
+    } elseif ($_POST['button'] == "log_out") {
+        do_log_out();
+    } elseif ($_POST['button'] == "answer") {
+        if (isset($_SESSION['answer'])){
+            $_SESSION['step'] = "check answer";
+            if (isset($_POST['button'])){
+                if ($_POST['button'] == "log_out") {
+                    do_log_out();
+                }   
+            }
+        }
+        else {
+            set_error("there isn't any notification yet");
+        }
     }
 }
 
@@ -199,6 +273,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     } elseif ($currentStep == "check prices") {
         handle_check_prices();
     } elseif ($currentStep == "ask for a wish") {
+        ask_for_wish();
+    } elseif ($currentStep == "check answer") {
         ask_for_wish();
     } elseif ($currentStep == "choose what to pay") {
         handle_choose_what_to_pay();

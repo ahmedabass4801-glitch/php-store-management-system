@@ -15,9 +15,9 @@
 
     <label for="password">Password</label><br>
     <input type="password" id="password" name="password" required placeholder="••••••••"><br><br>
-
-    <button type="submit" class="submit-btn">Login</button><br><br>
-    <a href="forget-password-page.php">Forgot Password?</a>
+    <button type="submit" class="submit-btn">Login</button>&nbsp;&nbsp;
+    <!-- <label><input type='checkbox' name='rem' value='rememper' style = "position: relative; top: 2px;"> rememper me for a month </label> -->
+    <br><br><a href="forget-password-page.php">Forgot Password?</a>
     &nbsp;&nbsp;&nbsp;
     <a href="new-account-page.php">Create New Account</a><br>
 
