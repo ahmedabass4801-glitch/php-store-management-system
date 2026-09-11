@@ -165,7 +165,6 @@ When an error occurs, an appropriate error message is displayed instead of allow
 
 * **PHP**
 * **HTML**
-* **CSS**
 * **PHP Sessions**
 
 ---
