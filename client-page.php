@@ -12,7 +12,8 @@
 
         <?php
             foreach ($_SESSION['categories'] as $key => $value){
-            echo "<label><input type='checkbox' name='Categories[]' value='$key'> $key </label><br>";
+                if (!has_stock($value)) continue;
+                echo "<label><input type='checkbox' name='Categories[]' value='$key'> $key </label><br>";
             }
         ?>
         <br><button type="submit" class="submit-btn" style="width: 70px;" name="button" value="submit">submit</button>
@@ -25,9 +26,14 @@
     <?php elseif ($_SESSION['step'] == "check prices"): ?>
         <?php
             foreach ($_SESSION['chooses'] as $thing){
-                echo $thing . " : <br><br>";
-                print_data($_SESSION['categories'][$thing]);
-                echo "<hr>";
+                echo "<h3>" . $thing . "</h3>";
+                echo "<table border='1' cellpadding='6' cellspacing='0'>";
+                echo "<tr><th>Item</th><th>Price</th><th>Available Quantity</th></tr>";
+                foreach ($_SESSION['categories'][$thing] as $item => $details){
+                    if ($details['Quantity'] < 1) continue;
+                    echo "<tr><td>" . $item . "</td><td>" . $details['price'] . "$</td><td>" . $details['Quantity'] . "</td></tr>";
+                }
+                echo "</table><br><hr>";
             }
         ?>
         <h3>buy some stuff ?</h3>
@@ -85,15 +91,11 @@
             foreach ($_SESSION['chooses'] as $current){
                 echo "<b>" . $current . " : </b><br><br>";
                 foreach ($_SESSION['categories'][$current] as $key => $value) {
+                    if ($value['Quantity'] < 1) continue;
                     echo "<label><input type='checkbox' name='chooses_2[]' value='$key'> $key </label>";
-                    foreach ($value as $k => $v){
-                        if ($k == "Quantity"){
-                            echo str_repeat("&nbsp;", 4);
-                            echo "<label><input type='number' name='quantity[$key]' value='1' min='1' max='$v' style='width: 70px;' step='1'></label><br><br>";
-                        } else {
-                            echo "&nbsp;&nbsp;" . $v . "$";
-                        }
-                    }
+                    echo str_repeat("&nbsp;", 4);
+                    echo "<label><input type='number' name='quantity[$key]' value='1' min='1' max='" . $value['Quantity'] . "' style='width: 70px;' step='1'></label>";
+                    echo "&nbsp;&nbsp;" . $value['price'] . "$<br><br>";
                 }
                 echo "<br><br><hr>";
             }

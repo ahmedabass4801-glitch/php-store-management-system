@@ -45,44 +45,52 @@ if (!isset($_SESSION['categories'])) {
     ];
 }
 
-// $_SESSION['answer'] = [
-//     'A' => [
-//         'rejected' => [
-//             'Electronics' => [
-//                 'Laptop',
-//                 'Keyboard',
-//                 'Mouse'
-//             ],
-//             'Clothes' => [
-//                 'T-Shirt',
-//                 'Jacket'
-//             ]
-//         ],
-//         'accepted' => [
-//             'Electronics' => [
-//                 'Monitor',
-//                 'Headphones'
-//             ]
-//         ]
-//     ],
+/* 
+if (!isset($_SESSION['categories'])) {
+    $_SESSION['categories'] = [
 
-//     'Mohamed' => [
-//         'rejected' => [
-//             'Books' => [
-//                 'PHP Book',
-//                 'SQL Book'
-//             ]
-//         ],
-//         'accepted' => [
-//             'Electronics' => [
-//                 'Keyboard'
-//             ]
-//         ]
-//     ]
-// ];
+        "Electronics" => [
+            "TV"      => ["price" => 1300, "Quantity" => 0],
+            "Fridge"  => ["price" => 30000, "Quantity" => 0],
+            "Oven"    => ["price" => 25000, "Quantity" => 0],
+        ],
+
+        "Food" => [
+            "Rice"  => ["price" => 35, "Quantity" => 0],
+            "Milk"  => ["price" => 30, "Quantity" => 80],
+            "Bread" => ["price" => 5, "Quantity" => 200],
+        ]
+    ];
+}
+*/
+
+function has_stock($category){
+    foreach ($category as $item){
+        if (isset($item['Quantity']) && $item['Quantity'] >= 1){
+            return true;
+        }
+    }
+    return false;
+}
+
+function empty_category(){
+    foreach($_SESSION['categories'] as $categories => $category){
+        if ($category.count() == 0){
+            return true;
+        } else {
+            foreach($category as $items => $item) {
+                
+            }
+        }
+    }
+}
 
 if (!isset($_SESSION['step'])) {
     $_SESSION['step'] = "choose Categories";
+}
+
+if (!isset($_SESSION['sales'])) {
+    $_SESSION['sales'] = [];
 }
 
 function print_data($data){
@@ -98,6 +106,43 @@ function print_data($data){
         echo "<br>";
     }
 }
+
+############################
+/*---- under Maintenance ----*/
+############################
+
+function nemc($category) {
+    $n = false;
+    foreach ($category as $items) {
+        if (!empty($items)) {
+            $n = true;
+        }
+    }
+    return $n;
+}
+
+function print_wishes($array) {
+    foreach ($_SESSION['categories'] as $thing => $category) {
+        if (nemc($category)) {
+            echo "<h3>" . $thing . "</h3>";
+            echo "<ul>";
+            foreach ($category as $categoryName => $items) {
+                if (!empty($items)) {
+                    echo "<li><strong>" . $categoryName . "</strong>";
+                    echo "<ul>";
+                    foreach ($items as $wish) {
+                        echo "<li>" . $wish . "</li>";
+                    }
+                    echo "</ul>";
+                    echo "</li>";
+                }
+            }
+            echo "</ul>";
+        }
+    }
+}
+
+############################
 
 function do_log_out(){
     unset($_SESSION['step']);
@@ -187,8 +232,14 @@ function handle_last_step(){
                     if (!isset($_SESSION['categories'][$category][$item])) {
                         continue;
                     }   
-                        $qty = isset($_SESSION['quantity']) ? (int)$_SESSION['quantity'][$item] : 0;
-                        $_SESSION['categories'][$category][$item]['Quantity'] -= $qty;
+                    if (!isset($_SESSION['sales'])) {
+                        $_SESSION['sales'] = [];
+                    }
+                    $user = $_SESSION['user'];
+                    $price = $_SESSION['categories'][$category][$item]['price'];
+                    $qty = isset($_SESSION['quantity']) ? (int)$_SESSION['quantity'][$item] : 0;
+                    $_SESSION['categories'][$category][$item]['Quantity'] -= $qty;
+                    $_SESSION['sales'][$user][$category][$item] = ['Quantity' => $qty, 'Total_Price' => $price * $qty];
             }   }
             $_SESSION['step'] = "done";
         } elseif ($_POST['button'] == "edit"){

@@ -10,7 +10,7 @@
     <form method="POST">
 
 <?php if ($_SESSION['admin_step'] == "check wishes"): ?>
-    <?php if (there_is_wish($_SESSION['wish'])) : ?>
+    <?php if (there_is_wish()) : ?>
         <?php print_wishes($_SESSION); ?>
         <hr>
         <button type="submit" class="submit-btn" name="button" value="accept" style="width: 100px;">accept wishes</button>

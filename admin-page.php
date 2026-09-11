@@ -6,9 +6,17 @@
     <title>admin</title>
 </head>
 <body>
-<a href="wish.php">wishes section</a><br>
-<a href="my-products.php">products review</a><br>
+<a href="wish.php">wishes section</a>
+&nbsp;&nbsp;
+<?php echo wish_counter() . " wish(es)"; ?><br>
+<a href="my-products.php">products review</a>
+&nbsp;&nbsp;
+<span style="color: red;">
+<?php echo warning_counter() . " Warning(s)"; ?>
+</span><br>
+<a href="sales.php">Sales</a>
+&nbsp;&nbsp;
+<?php echo total_earn() . " $"; ?><br>
 <a href="index.php">log out</a><br>
-<a href=".php">Create New Account</a><br>
 </body>
 </html>

@@ -5,22 +5,6 @@ error_reporting(E_ALL);
 
 session_start();
 
-if (!isset($_SESSION['wish'])){
-    $_SESSION['wish'] = [
-        'Ahmed' => [
-            'Electronics' => ['iPhone 15', 'AirPods Pro'],
-            'Books' => ['Clean Code']
-        ],
-        'Mohamed' => [
-            'Sportts' => ['Running Shoes', 'Football Shirt']
-        ],
-        'Ali' => [
-            'Clothing' => ['Black Jacket', 'Blue Jeans'],
-            'Electronics' => ['Gaming Mouse']
-        ]
-    ];
-}
-
 if(!isset($_SESSION['admin_step'])){
     $_SESSION['admin_step'] = "check wishes";
 }
@@ -31,16 +15,20 @@ if(!isset($_SESSION['answer'])){
 
 $error = "";
 
-function there_is_wish($test) {
+function there_is_wish() {
     $wish = false;
-    foreach ($test as $user) {
-        foreach ($user as $category) {
-            if (!empty($category)) {
-                $wish = true;
+    if (isset($_SESSION['wish'])){
+        foreach ($_SESSION['wish'] as $user) {
+            foreach ($user as $category) {
+                if (!empty($category)) {
+                    $wish = true;
+                }
             }
         }
+        return $wish;
+    } else {
+        return false;
     }
-    return $wish;
 }
 
 function nemc($category) {
@@ -51,6 +39,29 @@ function nemc($category) {
         }
     }
     return $n;
+}
+
+function print_wishes() {
+    if (isset($_SESSION['wish']) && !empty($_SESSION['wish']) && there_is_wish($_SESSION['wish'])){
+        foreach ($_SESSION['wish'] as $user => $category) {
+            if (nemc($category)) {
+                echo "<h3>" . $user . "</h3>";
+                echo "<ul>";
+                foreach ($category as $categoryName => $items) {
+                    if (!empty($items)) {
+                        echo "<li><strong>" . $categoryName . "</strong>";
+                        echo "<ul>";
+                        foreach ($items as $wish) {
+                            echo "<li>" . $wish . "</li>";
+                        }
+                        echo "</ul>";
+                        echo "</li>";
+                    }
+                }
+                echo "</ul>";
+            }
+        }
+    }
 }
 
 function exist($user, $categories, $items){
@@ -80,31 +91,6 @@ function exist($user, $categories, $items){
     return true;
 }
 
-/* 
-im so sorry to tell you that $category, $item will be array not single element
-*/
-
-function print_wishes($array) {
-    foreach ($_SESSION['wish'] as $user => $category) {
-        if (nemc($category)) {
-            echo "<h3>" . $user . "</h3>";
-            echo "<ul>";
-            foreach ($category as $categoryName => $items) {
-                if (!empty($items)) {
-                    echo "<li><strong>" . $categoryName . "</strong>";
-                    echo "<ul>";
-                    foreach ($items as $wish) {
-                        echo "<li>" . $wish . "</li>";
-                    }
-                    echo "</ul>";
-                    echo "</li>";
-                }
-            }
-            echo "</ul>";
-        }
-    }
-}
-
 function wipe($user, $categories, $items){
     foreach($items as $item){
         foreach($categories as $category){
@@ -120,6 +106,7 @@ if(isset($_SESSION['admin_step'])){
     if ($_SESSION['admin_step'] == "check wishes"){
         if (isset($_POST['button'])){
             if ($_POST['button'] == "back"){
+                unset($_SESSION['admin_step']);
                 header("Location: admin.php");
                 exit();
             } elseif ($_POST['button'] == "accept"){
@@ -149,6 +136,7 @@ if(isset($_SESSION['admin_step'])){
                     wipe($user, $categories, $items);
                     if ($_POST['button'] == "confirm"){
                         header("Location: admin.php");
+                        $_SESSION['admin_step'] = "check wishes";
                         exit();
                     } elseif ($_POST['button'] == "again"){
                         $_SESSION['admin_step'] = "check wishes";

@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     // }
     if ($email === $_SESSION['admin']['email']){
         if($password === $_SESSION['admin']['password']){
-            $_SESSION['current_admin'] = explode('@', $email)[0];
+            $_SESSION['current_admin'] = $email;
             header("Location: admin.php");
             exit();
         } else {
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
     } elseif (array_key_exists($email, $_SESSION['users'])) {
         if ($_SESSION['users'][$email] === $password) {
-            $_SESSION['user'] = explode('@', $email)[0];
+            $_SESSION['user'] = $email;
             header("Location: client.php");
             exit();
         } else {
