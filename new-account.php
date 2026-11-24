@@ -1,7 +1,8 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin'])) {
-    $_SESSION['admin'] = ["email" => "ahmedabass4801@gmail.com", "password" => "eltramador123"];
+    $config = require __DIR__ . '/config.php';
+    $_SESSION['admin'] = ["email" => $config['admin_email'], "password" => $config['admin_password']];
 }
 if (!isset($_SESSION['users'])) {
     $_SESSION['users'] = [];
@@ -18,5 +19,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
         $message = "your passwords don't match<br>try again";
     }
 }
-include("new-account-page.php");
+include("views/new-account-page.php");
 ?>

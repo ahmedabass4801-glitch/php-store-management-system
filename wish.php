@@ -155,6 +155,6 @@ if(isset($_SESSION['admin_step'])){
     }
 }
 
-include("wish-page.php");
+include("views/wish-page.php");
 
 ?>
