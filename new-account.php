@@ -18,5 +18,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
         $message = "your passwords don't match<br>try again";
     }
 }
-include("new-account-page.php");
+include("views/new-account-page.php");
 ?>

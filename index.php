@@ -46,5 +46,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $error = "email not found<br>you can create new account from link above";
     }
 }
-include("login-page.php");
+include("views/login-page.php");
 ?>

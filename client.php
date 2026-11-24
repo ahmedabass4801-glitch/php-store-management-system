@@ -336,5 +336,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     }
 }
 
-include("client-page.php");
+include("views/client-page.php");
 ?>

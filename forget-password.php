@@ -41,5 +41,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
         }
     }
 }
-include("forget-password-page.php");
+include("views/forget-password-page.php");
 ?>
