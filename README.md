@@ -4,7 +4,7 @@
 
 تطبيق ويب بلغة PHP لإدارة متجر إلكتروني بواجهتين: واجهة العميل (تصفح المنتجات، الشراء، إرسال طلبات "ويش" للمنتجات غير المتوفرة، تسجيل حساب، استرجاع كلمة المرور) ولوحة الأدمن (إدارة المخزون والأسعار، تنبيهات نقص المخزون، متابعة المبيعات، قبول أو رفض طلبات العملاء). النسخة الحالية تخزن البيانات في جلسات PHP (Sessions) بدون قاعدة بيانات.
 
-للتشغيل: انسخ `config/config.example.php` إلى `config/config.php` وعدّل بيانات الأدمن، ثم شغّل `php -S localhost:8000 -t public` وافتح `http://localhost:8000`.
+للتشغيل: انسخ `config/config.example.php` إلى `config/config.php` ثم شغّل `php -S localhost:8000 -t public` وافتح `http://localhost:8000`. تسجيل دخول الأدمن التجريبي الجاهز: البريد `admin@example.com` وكلمة المرور `demo1234` (للتجربة فقط، غيّرها قبل أي استخدام حقيقي).
 
 ---
 
@@ -57,7 +57,7 @@ PHP (vanilla), HTML, PHP sessions. No framework, no database, no Composer depend
    ```bash
    cp config/config.example.php config/config.php
    ```
-   Then edit `config/config.php` and set `admin_email` and `admin_password`.
+   The template ships with open demo credentials (see Demo login below), so you can skip this for a quick try. For real use, edit `config/config.php` and set your own `admin_email` and `admin_password`.
 
 ### Run
 
@@ -66,6 +66,15 @@ php -S localhost:8000 -t public
 ```
 
 Open http://localhost:8000. With XAMPP, point the virtual host's document root at the `public/` folder.
+
+### Demo login
+
+`config/config.example.php` ships with open demo credentials, so after copying it to `config/config.php` you can sign in to the admin dashboard right away:
+
+- Email: `admin@example.com`
+- Password: `demo1234`
+
+These are for trying the system only. Set your own credentials in `config/config.php` before any real use.
 
 ### Known limitations
 
