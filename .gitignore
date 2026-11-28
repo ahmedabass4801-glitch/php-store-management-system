@@ -1,1 +1,18 @@
-config.php
+# Local secrets, never commit
+config/config.php
+.env
+.env.*
+!.env.example
+
+# Logs, dumps, backups
+*.log
+*.sql
+*.bak
+*.zip
+
+# Dependencies and OS/IDE files
+vendor/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

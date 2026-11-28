@@ -272,5 +272,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
     }
 }
 
-include("views/my-products-page.php");
+include __DIR__ . "/../src/views/my-products-page.php";
 ?>

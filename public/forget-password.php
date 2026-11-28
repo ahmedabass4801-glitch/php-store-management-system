@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['admin'])) {
-    $config = require __DIR__ . '/config.php';
+    $config = require __DIR__ . '/../config/config.php';
     $_SESSION['admin'] = ["email" => $config['admin_email'], "password" => $config['admin_password']];
 }
 if (!isset($_SESSION['users'])) {
@@ -42,5 +42,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST"){
         }
     }
 }
-include("views/forget-password-page.php");
+include __DIR__ . "/../src/views/forget-password-page.php";
 ?>

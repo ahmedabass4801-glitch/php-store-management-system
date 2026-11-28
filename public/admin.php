@@ -88,5 +88,5 @@ function total_earn(){
     return $money;
 }
 
-include("views/admin-page.php");
+include __DIR__ . "/../src/views/admin-page.php";
 ?>

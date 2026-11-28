@@ -155,6 +155,6 @@ if(isset($_SESSION['admin_step'])){
     }
 }
 
-include("views/wish-page.php");
+include __DIR__ . "/../src/views/wish-page.php";
 
 ?>

@@ -1,6 +1,72 @@
-# php-store-management-system
-**Store Management System** — A full-stack PHP app with customer and admin sides. Customers can sign up, browse products, use a cart and wishlist, and reset passwords. Admins manage inventory, edit prices and stock, view customer wishlists, track order revenue, and get low-stock alerts.
+# نظام إدارة المتجر | Store Management System
 
-## Setup
+## ملخص بالعربي
 
-Admin credentials are not stored in the code. Copy `config.example.php` to `config.php` and set `admin_email` and `admin_password`. `config.php` is ignored by git.
+تطبيق ويب بلغة PHP لإدارة متجر إلكتروني بواجهتين: واجهة العميل (تصفح المنتجات، الشراء، إرسال طلبات "ويش" للمنتجات غير المتوفرة، تسجيل حساب، استرجاع كلمة المرور) ولوحة الأدمن (إدارة المخزون والأسعار، تنبيهات نقص المخزون، متابعة المبيعات، قبول أو رفض طلبات العملاء). النسخة الحالية تخزن البيانات في جلسات PHP (Sessions) بدون قاعدة بيانات.
+
+للتشغيل: انسخ `config/config.example.php` إلى `config/config.php` وعدّل بيانات الأدمن، ثم شغّل `php -S localhost:8000 -t public` وافتح `http://localhost:8000`.
+
+---
+
+## English
+
+A PHP store management app with a customer side and an admin side. Data and state live in PHP sessions (no database yet).
+
+### Features
+
+- Login, client sign-up, forgot-password flow, role-based redirect, logout
+- Client: browse products by category, buy with quantity, review/edit/confirm purchases (stock is deducted), send a "wish" for products not in the store and see the admin's reply
+- Admin: view inventory, add stock, change prices, low-stock alerts, accept/reject customer wishes, view sales
+
+Full feature description: [docs/Full-Description.md](docs/Full-Description.md)
+
+### Tech stack
+
+PHP (vanilla), HTML, PHP sessions. No framework, no database, no Composer dependencies.
+
+### Folder map
+
+```text
+.
+├── public/                  # Web root: entry points (one file per page/action)
+│   ├── index.php            # Login
+│   ├── new-account.php      # Client sign-up
+│   ├── forget-password.php  # Password reset
+│   ├── client.php           # Client shop and purchase flow
+│   ├── admin.php            # Admin dashboard
+│   ├── my-products.php      # Admin: inventory and prices
+│   ├── wish.php             # Wishes (client send / admin review)
+│   └── sales.php            # Admin: sales
+├── src/
+│   └── views/               # HTML templates included by the pages above
+├── config/
+│   └── config.example.php   # Template for config/config.php (git-ignored)
+└── docs/
+    └── Full-Description.md  # Detailed feature description
+```
+
+### Install
+
+1. Install PHP 8+ (or XAMPP).
+2. Clone the repo:
+   ```bash
+   git clone https://github.com/ahmedabass4801-glitch/php-store-management-system.git
+   cd php-store-management-system
+   ```
+3. Create your config (admin account credentials are not stored in the code):
+   ```bash
+   cp config/config.example.php config/config.php
+   ```
+   Then edit `config/config.php` and set `admin_email` and `admin_password`.
+
+### Run
+
+```bash
+php -S localhost:8000 -t public
+```
+
+Open http://localhost:8000. With XAMPP, point the virtual host's document root at the `public/` folder.
+
+### Known limitations
+
+No password hashing, CSRF protection or rate limiting yet, and the reset flow does not email a code. Data resets with the session.

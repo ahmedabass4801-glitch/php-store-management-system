@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 session_start();
 
 if (!isset($_SESSION['admin'])) {
-    $config = require __DIR__ . '/config.php';
+    $config = require __DIR__ . '/../config/config.php';
     $_SESSION['admin'] = ["email" => $config['admin_email'], "password" => $config['admin_password']];
 }
 if (!isset($_SESSION['users'])) {
@@ -47,5 +47,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $error = "email not found<br>you can create new account from link above";
     }
 }
-include("views/login-page.php");
+include __DIR__ . "/../src/views/login-page.php";
 ?>
